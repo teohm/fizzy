@@ -22,7 +22,7 @@ class Account::ExportsControllerTest < ActionDispatch::IntegrationTest
     export = Account::Export.last
     assert_equal users(:jason), export.user
     assert_equal Current.account, export.account
-    assert export.pending?
+    assert_predicate export, :pending?
   end
 
   test "create rejects request when current export limit is reached" do
@@ -85,7 +85,7 @@ class Account::ExportsControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :created
     body = @response.parsed_body
-    assert body["id"].present?
+    assert_predicate body["id"], :present?
     assert_equal "pending", body["status"]
     assert_nil body["download_url"]
   end
@@ -100,7 +100,7 @@ class Account::ExportsControllerTest < ActionDispatch::IntegrationTest
     body = @response.parsed_body
     assert_equal export.id, body["id"]
     assert_equal "completed", body["status"]
-    assert body["download_url"].present?
+    assert_predicate body["download_url"], :present?
   end
 
   test "show as JSON with bearer token returns a download URL that can be fetched" do
@@ -115,7 +115,7 @@ class Account::ExportsControllerTest < ActionDispatch::IntegrationTest
     body = @response.parsed_body
     assert_equal export.id, body["id"]
     assert_equal "completed", body["status"]
-    assert body["download_url"].present?
+    assert_predicate body["download_url"], :present?
 
     get URI(body["download_url"]).request_uri, env: bearer_token
     assert_response :redirect

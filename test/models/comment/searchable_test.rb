@@ -9,7 +9,7 @@ class Comment::SearchableTest < ActiveSupport::TestCase
 
   test "searchable? returns true for comments on published cards" do
     comment = @card.comments.create!(body: "test comment", creator: @user)
-    assert comment.searchable?
+    assert_predicate comment, :searchable?
   end
 
   test "searchable? returns false for comments on draft cards" do

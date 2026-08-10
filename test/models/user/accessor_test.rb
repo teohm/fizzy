@@ -20,8 +20,8 @@ class User::AccessorTest < ActiveSupport::TestCase
     freeze_time do
       card = user.draft_new_card_in(board)
 
-      assert card.persisted?
-      assert card.drafted?
+      assert_predicate card, :persisted?
+      assert_predicate card, :drafted?
       assert_equal user, card.creator
       assert_equal board, card.board
       assert_equal Time.current, card.created_at

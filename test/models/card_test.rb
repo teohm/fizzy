@@ -136,8 +136,8 @@ class CardTest < ActiveSupport::TestCase
     card_events_on_old_board = card.events.where(board: old_board)
     comment_events_on_old_board = Event.where(board: old_board, eventable: card.comments)
 
-    assert card_events_on_old_board.exists?
-    assert comment_events_on_old_board.exists?
+    assert_predicate card_events_on_old_board, :exists?
+    assert_predicate comment_events_on_old_board, :exists?
 
     card.move_to(new_board)
 
@@ -148,14 +148,14 @@ class CardTest < ActiveSupport::TestCase
 
     assert_empty card_events_on_old_board
     assert_empty comment_events_on_old_board
-    assert card_events_on_new_board.exists?
-    assert comment_events_on_new_board.exists?
+    assert_predicate card_events_on_new_board, :exists?
+    assert_predicate comment_events_on_new_board, :exists?
     assert card_events_on_new_board.find_by(action: "card_board_changed")
   end
 
   test "a card is filled if it has either the title or the description set" do
-    assert Card.new(title: "Some title").filled?
-    assert Card.new(description: "Some description").filled?
+    assert_predicate Card.new(title: "Some title"), :filled?
+    assert_predicate Card.new(description: "Some description"), :filled?
 
     assert_not Card.new.filled?
   end

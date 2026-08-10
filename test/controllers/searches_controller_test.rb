@@ -17,7 +17,7 @@ class SearchesControllerTest < ActionDispatch::IntegrationTest
   test "search" do
     # Search query is blank
     get search_path(q: "", script_name: "/#{@account.external_account_id}")
-    assert @query.nil?
+    assert_nil @query
 
     # Searching by card title
     get search_path(q: "broken", script_name: "/#{@account.external_account_id}")
@@ -94,7 +94,7 @@ class SearchesControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
 
     # Should escape <b> tags
-    assert response.body.include?("&lt;b&gt;")
+    assert_includes response.body, "&lt;b&gt;"
     # But should preserve highlight marks around "testing"
     assert_match(/<mark class="circled-text"><span><\/span>testing<\/mark>/, response.body)
   end

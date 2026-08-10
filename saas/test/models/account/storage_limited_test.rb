@@ -4,7 +4,7 @@ class Account::StorageLimitedTest < ActiveSupport::TestCase
   test "exceeding storage limit when bytes used exceeds 1 GB" do
     Account.any_instance.stubs(:bytes_used).returns(1.gigabyte + 1)
 
-    assert accounts(:initech).exceeding_storage_limit?
+    assert_predicate accounts(:initech), :exceeding_storage_limit?
   end
 
   test "not exceeding storage limit when bytes used equals 1 GB" do
@@ -22,7 +22,7 @@ class Account::StorageLimitedTest < ActiveSupport::TestCase
   test "nearing storage limit when within 500 MB of the limit" do
     Account.any_instance.stubs(:bytes_used).returns(600.megabytes)
 
-    assert accounts(:initech).nearing_storage_limit?
+    assert_predicate accounts(:initech), :nearing_storage_limit?
   end
 
   test "not nearing storage limit when well under the threshold" do

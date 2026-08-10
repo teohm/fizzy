@@ -25,7 +25,7 @@ class Card::CommentableTest < ActiveSupport::TestCase
   end
 
   test "commentable is true for published cards, false for drafts" do
-    assert cards(:logo).commentable?
+    assert_predicate cards(:logo), :commentable?
     assert_not cards(:unfinished_thoughts).commentable?
   end
 end

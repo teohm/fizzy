@@ -17,19 +17,19 @@ class Card::CloseableTest < ActiveSupport::TestCase
       cards(:logo).close(user: users(:kevin))
     end
 
-    assert cards(:logo).closed?
-    assert cards(:logo).events.last.action.card_closed?
+    assert_predicate cards(:logo), :closed?
+    assert_predicate cards(:logo).events.last.action, :card_closed?
     assert_equal users(:kevin), cards(:logo).closed_by
   end
 
   test "reopen cards" do
-    assert cards(:shipping).closed?
+    assert_predicate cards(:shipping), :closed?
 
     assert_difference -> { cards(:shipping).events.count }, +1 do
       cards(:shipping).reopen
     end
-    assert cards(:shipping).reload.open?
-    assert cards(:shipping).events.last.action.card_reopened?
+    assert_predicate cards(:shipping).reload, :open?
+    assert_predicate cards(:shipping).events.last.action, :card_reopened?
   end
 
   test "close card from triage column" do
@@ -37,7 +37,7 @@ class Card::CloseableTest < ActiveSupport::TestCase
     assert_equal columns(:writebook_triage), card.column
 
     card.close
-    assert card.closed?
+    assert_predicate card, :closed?
   end
 
   test "close card from active column" do
@@ -45,18 +45,18 @@ class Card::CloseableTest < ActiveSupport::TestCase
     assert_equal columns(:writebook_in_progress), card.column
 
     card.close
-    assert card.closed?
+    assert_predicate card, :closed?
   end
 
   test "close card from NOT NOW" do
     card = cards(:logo)
 
     card.postpone
-    assert card.postponed?
-    assert card.not_now.present?
+    assert_predicate card, :postponed?
+    assert_predicate card.not_now, :present?
 
     card.close
-    assert card.closed?
+    assert_predicate card, :closed?
     assert_nil card.reload.not_now
   end
 end

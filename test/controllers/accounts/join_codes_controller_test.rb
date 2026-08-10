@@ -29,7 +29,7 @@ class Account::JoinCodesControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
 
     body = @response.parsed_body
-    assert body["code"].present?
+    assert_predicate body["code"], :present?
     assert body.key?("usage_count")
     assert body.key?("usage_limit")
     assert body.key?("url")

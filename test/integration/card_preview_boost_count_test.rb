@@ -26,6 +26,6 @@ class CardPreviewBoostCountTest < ActionDispatch::IntegrationTest
     # Find the card without reactions and verify no boost count is shown
     # We check the overall page doesn't have a boost count for zero reactions
     # (This is an imperfect test but reasonable given the structure)
-    assert @card_without_reactions.reactions.none?
+    assert_predicate @card_without_reactions.reactions, :none?
   end
 end

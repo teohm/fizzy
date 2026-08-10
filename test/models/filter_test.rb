@@ -82,7 +82,7 @@ class FilterTest < ActiveSupport::TestCase
 
   test "cacheability" do
     assert_not filters(:jz_assignments).cacheable?
-    assert users(:david).filters.create!(board_ids: [ boards(:writebook).id ]).cacheable?
+    assert_predicate users(:david).filters.create!(board_ids: [ boards(:writebook).id ]), :cacheable?
   end
 
   test "terms" do
@@ -131,7 +131,7 @@ class FilterTest < ActiveSupport::TestCase
     seed_filter = users(:david).filters.new indexed_by: "all", terms: [ "haggis" ]
     filter = seed_filter.with(indexed_by: "closed")
 
-    assert filter.indexed_by.closed?
+    assert_predicate filter.indexed_by, :closed?
     assert_equal [ "haggis" ], filter.terms
   end
 
@@ -171,10 +171,10 @@ class FilterTest < ActiveSupport::TestCase
   end
 
   test "check if a filter is used" do
-    assert users(:david).filters.new(creator_ids: [ users(:david).id ]).used?
+    assert_predicate users(:david).filters.new(creator_ids: [ users(:david).id ]), :used?
     assert_not users(:david).filters.new.used?
 
-    assert users(:david).filters.new(board_ids: [ boards(:writebook).id ]).used?
+    assert_predicate users(:david).filters.new(board_ids: [ boards(:writebook).id ]), :used?
     assert_not users(:david).filters.new(board_ids: [ boards(:writebook).id ]).used?(ignore_boards: true)
   end
 
@@ -199,7 +199,7 @@ class FilterTest < ActiveSupport::TestCase
     assert_equal [ "Milton's Wish List" ], filter.board_titles
 
     # Should NOT leak board names from other accounts (37s has multiple boards)
-    assert Board.where.not(account: accounts(:initech)).exists?
+    assert_predicate Board.where.not(account: accounts(:initech)), :exists?
     assert_not_includes filter.board_titles, "Writebook"
     assert_not_includes filter.board_titles, "Private board"
   end

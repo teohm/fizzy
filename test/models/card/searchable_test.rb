@@ -5,7 +5,7 @@ class Card::SearchableTest < ActiveSupport::TestCase
 
   test "searchable? returns true for published cards" do
     card = @board.cards.create!(title: "Published Card", status: "published", creator: @user)
-    assert card.searchable?
+    assert_predicate card, :searchable?
   end
 
   test "searchable? returns false for draft cards" do
@@ -57,7 +57,7 @@ class Card::SearchableTest < ActiveSupport::TestCase
 
     # Check the content length was within the limit
     search_record = search_record_class.find_by(searchable_type: "Card", searchable_id: card.id)
-    assert search_record.content.bytesize <= Searchable::SEARCH_CONTENT_LIMIT
+    assert_operator search_record.content.bytesize, :<=, Searchable::SEARCH_CONTENT_LIMIT
   end
 
   test "deleting card removes search record and FTS entry" do

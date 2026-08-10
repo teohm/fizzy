@@ -39,8 +39,8 @@ class AccountMailerTest < ActionMailer::TestCase
   test "cancellation has both HTML and text parts" do
     email = AccountMailer.cancellation(@cancellation)
 
-    assert email.html_part.present?, "Email should have HTML part"
-    assert email.text_part.present?, "Email should have text part"
+    assert_predicate email.html_part, :present?, "Email should have HTML part"
+    assert_predicate email.text_part, :present?, "Email should have text part"
   end
 
   test "cancellation mentions account access is removed" do

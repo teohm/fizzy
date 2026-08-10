@@ -26,7 +26,7 @@ class Sessions::MagicLinksControllerTest < ActionDispatch::IntegrationTest
       post session_magic_link_url, params: { code: magic_link.code }
 
       assert_response :redirect
-      assert cookies[:session_token].present?
+      assert_predicate cookies[:session_token], :present?
       assert_redirected_to landing_path, "Should redirect to after authentication path"
       assert_not MagicLink.exists?(magic_link.id), "The magic link should be consumed"
     end
@@ -41,7 +41,7 @@ class Sessions::MagicLinksControllerTest < ActionDispatch::IntegrationTest
       post session_magic_link_url, params: { code: magic_link.code }
 
       assert_response :redirect
-      assert cookies[:session_token].present?
+      assert_predicate cookies[:session_token], :present?
       assert_redirected_to new_signup_completion_path, "Should redirect to signup completion"
       assert_not MagicLink.exists?(magic_link.id), "The magic link should be consumed"
     end
@@ -88,7 +88,7 @@ class Sessions::MagicLinksControllerTest < ActionDispatch::IntegrationTest
       post session_path(format: :json), params: { email_address: identity.email_address }
       post session_magic_link_path(format: :json), params: { code: magic_link.code }
       assert_response :success
-      assert @response.parsed_body["session_token"].present?
+      assert_predicate @response.parsed_body["session_token"], :present?
       assert_equal false, @response.parsed_body["requires_signup_completion"]
     end
   end
@@ -101,7 +101,7 @@ class Sessions::MagicLinksControllerTest < ActionDispatch::IntegrationTest
       post session_path(format: :json), params: { email_address: identity.email_address }
       post session_magic_link_path(format: :json), params: { code: magic_link.code }
       assert_response :success
-      assert @response.parsed_body["session_token"].present?
+      assert_predicate @response.parsed_body["session_token"], :present?
       assert_equal true, @response.parsed_body["requires_signup_completion"]
     end
   end

@@ -86,7 +86,7 @@ class Notification::BundleTest < ActiveSupport::TestCase
       ends_at: 9.hours.from_now,
       status: :pending
     )
-    assert bundle_5.valid?
+    assert_predicate bundle_5, :valid?
   end
 
   test "overlapping bundles that are created relying on set_default_window are not created" do
@@ -106,7 +106,7 @@ class Notification::BundleTest < ActiveSupport::TestCase
 
     bundle = @user.notification_bundles.pending.last
 
-    assert bundle.pending?
+    assert_predicate bundle, :pending?
     assert_includes bundle.notifications, notification
 
     bundle.update!(ends_at: 1.minute.ago)
@@ -116,7 +116,7 @@ class Notification::BundleTest < ActiveSupport::TestCase
     end
 
     bundle.reload
-    assert bundle.delivered?
+    assert_predicate bundle, :delivered?
   end
 
   test "deliver_all don't deliver bundles that are not due" do
@@ -130,7 +130,7 @@ class Notification::BundleTest < ActiveSupport::TestCase
     end
 
     bundle.reload
-    assert bundle.pending?
+    assert_predicate bundle, :pending?
   end
 
   test "deliver sends email with time in user's time zone" do
@@ -154,7 +154,7 @@ class Notification::BundleTest < ActiveSupport::TestCase
     second_notification = @user.notifications.create!(source: events(:layout_commented), creator: @user)
     @user.notification_bundles.destroy_all
 
-    assert first_notification.updated_at <= second_notification.updated_at
+    assert_operator first_notification.updated_at, :<=, second_notification.updated_at
     @user.bundle(second_notification)
     @user.bundle(first_notification)
 
@@ -176,6 +176,6 @@ class Notification::BundleTest < ActiveSupport::TestCase
       end
     end
 
-    assert bundle.delivered?, "Bundle should be marked as delivered even if not sent"
+    assert_predicate bundle, :delivered?, "Bundle should be marked as delivered even if not sent"
   end
 end

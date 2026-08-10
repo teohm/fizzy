@@ -44,7 +44,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
   test "admin cannot deactivate the owner" do
     sign_in_as :kevin
 
-    assert users(:jason).owner?
+    assert_predicate users(:jason), :owner?
     assert users(:jason).active
 
     assert_no_difference -> { User.active.count } do
@@ -95,7 +95,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
 
     put user_path(users(:kevin)), params: { user: { avatar: png_file } }
     assert_redirected_to user_path(users(:kevin))
-    assert users(:kevin).reload.avatar.attached?
+    assert_predicate users(:kevin).reload.avatar, :attached?
     assert_equal "image/png", users(:kevin).avatar.content_type
   end
 
@@ -136,7 +136,7 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     put user_path(users(:kevin), format: :json), params: { user: { avatar: svg_file } }
 
     assert_response :unprocessable_entity
-    assert @response.parsed_body["avatar"].present?
+    assert_predicate @response.parsed_body["avatar"], :present?
   end
 
   test "destroy as JSON" do
@@ -178,6 +178,6 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     end
 
     json = @response.parsed_body
-    assert json.first["email_address"].present?
+    assert_predicate json.first["email_address"], :present?
   end
 end

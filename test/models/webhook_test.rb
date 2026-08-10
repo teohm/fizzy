@@ -3,13 +3,15 @@ require "test_helper"
 class WebhookTest < ActiveSupport::TestCase
   test "create" do
     webhook = Webhook.create! name: "Test", url: "https://example.com/webhook", board: boards(:writebook)
-    assert webhook.persisted?
-    assert webhook.active?
-    assert webhook.signing_secret.present?
-    assert webhook.delinquency_tracker.present?
+    assert_predicate webhook, :persisted?
+    assert_predicate webhook, :active?
+    assert_predicate webhook.signing_secret, :present?
+    assert_predicate webhook.delinquency_tracker, :present?
   end
 
-  test "validates the url" do
+  # One rule -- which URLs a webhook accepts -- checked against eight inputs. Splitting it
+  # per input would repeat the setup eight times to say the same thing.
+  test "validates the url" do # rubocop:disable Minitest/MultipleAssertions
     webhook = Webhook.new name: "Test", board: boards(:writebook)
     assert_not webhook.valid?
     assert_includes webhook.errors[:url], "not a URL"
@@ -31,13 +33,13 @@ class WebhookTest < ActiveSupport::TestCase
     assert_includes webhook.errors[:url], "must use http or https"
 
     webhook = Webhook.new name: "HTTP", board: boards(:writebook), url: "http://example.com/webhook"
-    assert webhook.valid?
+    assert_predicate webhook, :valid?
 
     webhook = Webhook.new name: "HTTPS", board: boards(:writebook), url: "https://example.com/webhook"
-    assert webhook.valid?
+    assert_predicate webhook, :valid?
 
     webhook = Webhook.new name: "TRAILING SPACE", board: boards(:writebook), url: "https://example.com/webhook "
-    assert webhook.valid?
+    assert_predicate webhook, :valid?
     assert_equal "https://example.com/webhook", webhook.url
   end
 
@@ -59,7 +61,7 @@ class WebhookTest < ActiveSupport::TestCase
 
   test "for_slack?" do
     webhook = Webhook.new url: "https://hooks.slack.com/services/T12345678/B12345678/abcdefghijklmnopqrstuvwx" # gitleaks:allow
-    assert webhook.for_slack?
+    assert_predicate webhook, :for_slack?
 
     webhook = Webhook.new url: "https://hooks.slack.com/services/T12345678/B12345678"
     assert_not webhook.for_slack?
@@ -76,10 +78,10 @@ class WebhookTest < ActiveSupport::TestCase
 
   test "for_campfire?" do
     webhook = Webhook.new url: "https://example.com/rooms/123/456-room-name/messages"
-    assert webhook.for_campfire?
+    assert_predicate webhook, :for_campfire?
 
     webhook = Webhook.new url: "https://campfire.example.com/rooms/999/123-test-room/messages"
-    assert webhook.for_campfire?
+    assert_predicate webhook, :for_campfire?
 
     webhook = Webhook.new url: "https://campfire.example.com/rooms/999/123/messages"
     assert_not webhook.for_campfire?, "The bot key is missing a token"
@@ -96,7 +98,7 @@ class WebhookTest < ActiveSupport::TestCase
 
   test "for_basecamp?" do
     webhook = Webhook.new url: "https://basecamp.com/999/integrations/some-token/buckets/111/chats/222/lines"
-    assert webhook.for_basecamp?
+    assert_predicate webhook, :for_basecamp?
 
     webhook = Webhook.new url: "https://example.com/webhook"
     assert_not webhook.for_basecamp?

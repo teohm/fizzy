@@ -17,7 +17,7 @@ class Account::ExportTest < ActiveSupport::TestCase
       export.build
     end
 
-    assert export.failed?
+    assert_predicate export, :failed?
   end
 
   test "cleanup deletes exports completed more than 24 hours ago" do
@@ -37,8 +37,8 @@ class Account::ExportTest < ActiveSupport::TestCase
 
     export.build
 
-    assert export.completed?
-    assert export.file.attached?
+    assert_predicate export, :completed?
+    assert_predicate export.file, :attached?
     assert_equal "application/zip", export.file.content_type
   end
 
@@ -52,7 +52,7 @@ class Account::ExportTest < ActiveSupport::TestCase
 
     export.build
 
-    assert export.completed?
+    assert_predicate export, :completed?
     export.file.open do |file|
       reader = ZipKit::FileReader.read_zip_structure(io: file)
       entry = reader.find { |e| e.filename == "storage/#{blob.key}" }
@@ -63,14 +63,14 @@ class Account::ExportTest < ActiveSupport::TestCase
   test "export excludes blobs and attachments from previous exports" do
     first_export = Account::Export.create!(account: Current.account, user: users(:david))
     first_export.build
-    assert first_export.completed?
+    assert_predicate first_export, :completed?
 
     first_export_blob = first_export.file.blob
     first_export_attachment = first_export.file.attachment
 
     second_export = Account::Export.create!(account: Current.account, user: users(:david))
     second_export.build
-    assert second_export.completed?
+    assert_predicate second_export, :completed?
 
     second_export.file.open do |file|
       reader = ZipKit::FileReader.read_zip_structure(io: file)
@@ -115,7 +115,7 @@ class Account::ExportTest < ActiveSupport::TestCase
     export = Account::Export.create!(account: Current.account, user: users(:david))
     export.build
 
-    assert export.completed?
+    assert_predicate export, :completed?
     export.file.open do |file|
       reader = ZipKit::FileReader.read_zip_structure(io: file)
       filenames = reader.map(&:filename)
@@ -145,6 +145,6 @@ class Account::ExportTest < ActiveSupport::TestCase
 
     export.build
 
-    assert export.completed?
+    assert_predicate export, :completed?
   end
 end

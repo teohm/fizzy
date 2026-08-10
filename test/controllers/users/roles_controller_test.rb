@@ -11,14 +11,14 @@ class Users::RolesControllerTest < ActionDispatch::IntegrationTest
     put user_role_path(users(:david)), params: { user: { role: "admin" } }
 
     assert_redirected_to account_settings_path
-    assert users(:david).reload.admin?
+    assert_predicate users(:david).reload, :admin?
   end
 
   test "update as JSON" do
     put user_role_path(users(:david)), params: { user: { role: "admin" } }, as: :json
 
     assert_response :no_content
-    assert users(:david).reload.admin?
+    assert_predicate users(:david).reload, :admin?
   end
 
   test "can't promote to special roles" do
@@ -32,7 +32,7 @@ class Users::RolesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "admin cannot demote the owner" do
-    assert users(:jason).owner?
+    assert_predicate users(:jason), :owner?
 
     assert_no_changes -> { users(:jason).reload.role } do
       put user_role_path(users(:jason)), params: { user: { role: "admin" } }
@@ -42,7 +42,7 @@ class Users::RolesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "admin cannot change owner role to member" do
-    assert users(:jason).owner?
+    assert_predicate users(:jason), :owner?
 
     assert_no_changes -> { users(:jason).reload.role } do
       put user_role_path(users(:jason)), params: { user: { role: "member" } }

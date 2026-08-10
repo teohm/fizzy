@@ -28,7 +28,7 @@ class Users::AvatarsControllerTest < ActionDispatch::IntegrationTest
 
   test "show own image redirects to the blob url" do
     users(:david).avatar.attach(io: File.open(file_fixture("moon.jpg")), filename: "moon.jpg", content_type: "image/jpeg")
-    assert users(:david).avatar.attached?
+    assert_predicate users(:david).avatar, :attached?
 
     get user_avatar_path(users(:david))
 
@@ -37,7 +37,7 @@ class Users::AvatarsControllerTest < ActionDispatch::IntegrationTest
 
   test "show other image redirects to the blob url" do
     users(:kevin).avatar.attach(io: File.open(file_fixture("moon.jpg")), filename: "moon.jpg", content_type: "image/jpeg")
-    assert users(:kevin).avatar.attached?
+    assert_predicate users(:kevin).avatar, :attached?
 
     get user_avatar_path(users(:kevin))
 

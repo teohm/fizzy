@@ -38,7 +38,7 @@ class Cards::PublishesControllerTest < ActionDispatch::IntegrationTest
     end
 
     new_card = Card.last
-    assert new_card.drafted?
+    assert_predicate new_card, :drafted?
     assert_redirected_to card_draft_path(new_card)
   end
 end

@@ -9,7 +9,7 @@ class UserTest < ActiveSupport::TestCase
     )
 
     assert_equal [ boards(:writebook) ], user.boards
-    assert user.settings.present?
+    assert_predicate user.settings, :present?
   end
 
   test "creation gives access to all_access boards" do
@@ -57,7 +57,7 @@ class UserTest < ActiveSupport::TestCase
     assert_includes user.errors[:name], "can't be blank"
 
     user.name = "Victor Cooper"
-    assert user.valid?
+    assert_predicate user, :valid?
   end
 
   test "setup?" do
@@ -67,14 +67,14 @@ class UserTest < ActiveSupport::TestCase
     assert_not user.setup?
 
     user.update!(name: "Kevin")
-    assert user.setup?
+    assert_predicate user, :setup?
   end
 
   test "verified? returns true when verified_at is present" do
     user = users(:david)
     user.update_column(:verified_at, Time.current)
 
-    assert user.verified?
+    assert_predicate user, :verified?
   end
 
   test "verified? returns false when verified_at is nil" do

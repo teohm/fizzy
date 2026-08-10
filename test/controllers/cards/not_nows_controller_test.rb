@@ -22,6 +22,6 @@ class Cards::NotNowsControllerTest < ActionDispatch::IntegrationTest
     post card_not_now_path(card), as: :json
 
     assert_response :no_content
-    assert card.reload.postponed?
+    assert_predicate card.reload, :postponed?
   end
 end
