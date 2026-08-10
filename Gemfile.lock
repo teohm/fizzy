@@ -430,6 +430,10 @@ GEM
     rubocop-ast (1.48.0)
       parser (>= 3.3.7.2)
       prism (~> 1.4)
+    rubocop-minitest (0.40.0)
+      lint_roller (~> 1.1)
+      rubocop (>= 1.75.0, < 2.0)
+      rubocop-ast (>= 1.38.0, < 2.0)
     rubocop-performance (1.26.1)
       lint_roller (~> 1.1)
       rubocop (>= 1.75.0, < 2.0)
@@ -568,6 +572,7 @@ DEPENDENCIES
   rails!
   rouge
   rqrcode
+  rubocop-minitest
   rubocop-rails-omakase
   selenium-webdriver
   simplecov

@@ -50,6 +50,7 @@ group :development, :test do
   gem "faker"
   gem "letter_opener"
   gem "rack-mini-profiler"
+  gem "rubocop-minitest", require: false
   gem "rubocop-rails-omakase", require: false
 end
 
