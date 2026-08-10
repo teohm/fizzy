@@ -1,5 +1,12 @@
+inherit_from: .rubocop_todo.yml
+
 # Omakase Ruby styling for Rails
 inherit_gem: { rubocop-rails-omakase: rubocop.yml }
+
+# Minitest conventions. The department scopes itself to test/**/* and *_test.rb, so
+# nothing here reaches app code.
+plugins:
+  - rubocop-minitest
 
 # Overwrite or add rules to create your own house style
 #
@@ -8,6 +15,13 @@ inherit_gem: { rubocop-rails-omakase: rubocop.yml }
 #   Enabled: false
 
 AllCops:
+  # rubocop-minitest ships 34 of its 55 cops as `pending`, which spares existing users a red
+  # build when they upgrade the gem. Nothing here was ever green under those cops, so that
+  # history is no reason to skip them: `pending` is a property of this config rather than of
+  # how long we have had the gem, and without this line a first install runs 15 of the 55
+  # and prints a 34-line warning on every run. What they currently find is parked in
+  # .rubocop_todo.yml, to be worked off a cop at a time.
+  NewCops: enable
   Exclude:
     - 'db/migrate/**/*'
     - 'db/schema*.rb'
