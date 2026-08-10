@@ -4,7 +4,7 @@ class Account::JoinCodeTest < ActiveSupport::TestCase
   test "generate code" do
     join_code = Account::JoinCode.create!(account: Current.account)
 
-    assert join_code.code.present?
+    assert_predicate join_code.code, :present?
 
     parts = join_code.code.split("-")
     assert_equal 3, parts.count

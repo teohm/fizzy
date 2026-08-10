@@ -6,13 +6,13 @@ class Card::TriageableTest < ActiveSupport::TestCase
   end
 
   test "active cards with columns are triaged" do
-    assert cards(:logo).triaged?
-    assert cards(:text).triaged?
+    assert_predicate cards(:logo), :triaged?
+    assert_predicate cards(:text), :triaged?
     assert_not cards(:buy_domain).triaged?
   end
 
   test "active cards without columns are awaiting triage" do
-    assert cards(:buy_domain).awaiting_triage?
+    assert_predicate cards(:buy_domain), :awaiting_triage?
     assert_not cards(:logo).awaiting_triage?
     assert_not cards(:text).awaiting_triage?
   end
@@ -22,14 +22,14 @@ class Card::TriageableTest < ActiveSupport::TestCase
     column = columns(:writebook_in_progress)
 
     assert_nil card.column
-    assert card.awaiting_triage?
+    assert_predicate card, :awaiting_triage?
 
     assert_difference -> { card.reload.events.where(action: "card_triaged").count }, +1 do
       card.triage_into(column)
     end
 
     assert_equal column, card.reload.column
-    assert card.triaged?
+    assert_predicate card, :triaged?
   end
 
   test "cannot triage into a column from a different board" do
@@ -47,13 +47,13 @@ class Card::TriageableTest < ActiveSupport::TestCase
 
   test "send a card back to triage" do
     card = cards(:logo)
-    assert card.triaged?
+    assert_predicate card, :triaged?
 
     assert_difference -> { card.reload.events.where(action: "card_sent_back_to_triage").count }, +1 do
       card.send_back_to_triage
     end
 
-    assert card.reload.awaiting_triage?
+    assert_predicate card.reload, :awaiting_triage?
   end
 
   test "scopes" do

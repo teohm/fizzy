@@ -24,7 +24,7 @@ class Webhook::DeliveryTest < ActiveSupport::TestCase
       response: { code: 200 },
       state: :completed
     )
-    assert delivery.succeeded?
+    assert_predicate delivery, :succeeded?
 
     delivery.response[:code] = 422
     assert_not delivery.succeeded?, "resonse must have a 2XX status"
@@ -107,12 +107,12 @@ class Webhook::DeliveryTest < ActiveSupport::TestCase
       delivery.deliver
     end
 
-    assert delivery.persisted?
+    assert_predicate delivery, :persisted?
     assert_equal "completed", delivery.state
-    assert delivery.request[:headers].present?
+    assert_predicate delivery.request[:headers], :present?
     assert_equal 200, delivery.response[:code]
-    assert delivery.response[:error].blank?
-    assert delivery.succeeded?
+    assert_predicate delivery.response[:error], :blank?
+    assert_predicate delivery, :succeeded?
   end
 
   test "deliver when the network timeouts" do
@@ -180,7 +180,7 @@ class Webhook::DeliveryTest < ActiveSupport::TestCase
     delivery.deliver
 
     assert_requested request_stub
-    assert delivery.succeeded?
+    assert_predicate delivery, :succeeded?
   end
 
   test "deliver with campfire webhook format" do
@@ -202,7 +202,7 @@ class Webhook::DeliveryTest < ActiveSupport::TestCase
     delivery.deliver
 
     assert_requested request_stub
-    assert delivery.succeeded?
+    assert_predicate delivery, :succeeded?
   end
 
   test "deliver with slack webhook format" do
@@ -225,7 +225,7 @@ class Webhook::DeliveryTest < ActiveSupport::TestCase
     delivery.deliver
 
     assert_requested request_stub
-    assert delivery.succeeded?
+    assert_predicate delivery, :succeeded?
   end
 
   test "deliver with generic webhook format" do
@@ -248,7 +248,7 @@ class Webhook::DeliveryTest < ActiveSupport::TestCase
     delivery.deliver
 
     assert_requested request_stub
-    assert delivery.succeeded?
+    assert_predicate delivery, :succeeded?
   end
 
   test "cleanup" do
@@ -445,7 +445,7 @@ class Webhook::DeliveryTest < ActiveSupport::TestCase
 
     delivery.deliver
 
-    assert delivery.succeeded?
+    assert_predicate delivery, :succeeded?
   end
 
   test "handles response too large error" do
@@ -471,6 +471,6 @@ class Webhook::DeliveryTest < ActiveSupport::TestCase
 
     assert_equal "completed", delivery.state
     assert_equal 200, delivery.response[:code]
-    assert delivery.succeeded?
+    assert_predicate delivery, :succeeded?
   end
 end

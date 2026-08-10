@@ -4,9 +4,9 @@ class MagicLinkTest < ActiveSupport::TestCase
   test "new" do
     magic_link = MagicLink.create!(identity: identities(:kevin))
 
-    assert magic_link.code.present?
+    assert_predicate magic_link.code, :present?
     assert_equal MagicLink::CODE_LENGTH, magic_link.code.length
-    assert magic_link.expires_at.present?
+    assert_predicate magic_link.expires_at, :present?
     assert_in_delta MagicLink::EXPIRATION_TIME.from_now, magic_link.expires_at, 1.second
   end
 

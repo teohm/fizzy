@@ -24,7 +24,7 @@ class Card::StallableTest < ActiveSupport::TestCase
 
     travel_to 3.months.from_now
 
-    assert cards(:logo).stalled?
+    assert_predicate cards(:logo), :stalled?
     assert_includes Card.stalled, cards(:logo)
   end
 
@@ -33,7 +33,7 @@ class Card::StallableTest < ActiveSupport::TestCase
 
     travel_to 3.months.from_now
 
-    assert cards(:logo).stalled?
+    assert_predicate cards(:logo), :stalled?
     assert_includes Card.stalled, cards(:logo)
 
     cards(:logo).comments.create!(body: "A new comment to unstall the card")
@@ -44,7 +44,7 @@ class Card::StallableTest < ActiveSupport::TestCase
     # and stalls again after more time passes
     travel_to 3.months.from_now
 
-    assert cards(:logo).stalled?
+    assert_predicate cards(:logo), :stalled?
     assert_includes Card.stalled, cards(:logo)
   end
 
@@ -54,7 +54,7 @@ class Card::StallableTest < ActiveSupport::TestCase
 
     travel_to 3.months.from_now
 
-    assert card.stalled?
+    assert_predicate card, :stalled?
     assert_includes Card.stalled, card
 
     travel_to Time.now + card.board.entropy.auto_postpone_period + 1.day
@@ -72,7 +72,7 @@ class Card::StallableTest < ActiveSupport::TestCase
     multiple_people_comment_on(cards(:logo))
 
     travel_to 1.month.from_now
-    assert cards(:logo).reload.stalled?
+    assert_predicate cards(:logo).reload, :stalled?
     assert_includes Card.stalled, cards(:logo)
   end
 

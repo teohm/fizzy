@@ -36,7 +36,7 @@ class Card::ActivitySpike::DetectorTest < ActiveSupport::TestCase
 
     multiple_people_comment_on(@card.reload)
 
-    assert @card.reload.activity_spike.updated_at > original_last_spike_at
+    assert_operator @card.reload.activity_spike.updated_at, :>, original_last_spike_at
   end
 
   test "concurrent spike creation should not create multiple spikes for a card" do
@@ -56,10 +56,10 @@ class Card::ActivitySpike::DetectorTest < ActiveSupport::TestCase
 
   private
     def assert_activity_spike_detected(card: @card)
-      assert card.activity_spike.blank?
+      assert_predicate card.activity_spike, :blank?
       perform_enqueued_jobs only: Card::ActivitySpike::DetectionJob do
         yield
       end
-      assert card.reload.activity_spike.present?
+      assert_predicate card.reload.activity_spike, :present?
     end
 end

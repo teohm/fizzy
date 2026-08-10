@@ -21,10 +21,13 @@ class Account::IncineratableTest < ActiveSupport::TestCase
     assert_equal [ @account ], Account.due_for_incineration
 
     @account.cancellation.update!(created_at: 29.days.ago)
-    assert Account.due_for_incineration.empty?
+    assert_empty Account.due_for_incineration
   end
 
-  test "incinerate destroys all associated records" do
+  # One behaviour -- incineration leaves nothing behind -- swept across every record type
+  # that hangs off an account. A test per type would multiply this setup by twenty-five,
+  # and the point is precisely that none of them survive together.
+  test "incinerate destroys all associated records" do # rubocop:disable Minitest/MultipleAssertions
     account = accounts(:initech)
     board = boards(:miltons_wish_list)
     card = cards(:radio)
@@ -77,41 +80,41 @@ class Account::IncineratableTest < ActiveSupport::TestCase
     user_ids = User.where(account_id: account_id).pluck(:id)
 
     # Confirm records exist before destroy
-    assert User.where(account_id: account_id).exists?
-    assert Board.where(account_id: account_id).exists?
-    assert Card.where(account_id: account_id).exists?
-    assert Tag.where(account_id: account_id).exists?
-    assert Column.where(account_id: account_id).exists?
-    assert Webhook.where(account_id: account_id).exists?
-    assert Access.where(account_id: account_id).exists?
-    assert Entropy.where(account_id: account_id).exists?
-    assert Account::JoinCode.where(account_id: account_id).exists?
-    assert Account::Export.where(account_id: account_id).exists?
-    assert Search::Query.where(account_id: account_id).exists?
-    assert Storage::Entry.where(account_id: account_id).exists?
-    assert Board::Publication.where(account_id: account_id).exists?
-    assert Event.where(account_id: account_id).exists?
-    assert Webhook::Delivery.where(account_id: account_id).exists?
-    assert Webhook::DelinquencyTracker.where(account_id: account_id).exists?
-    assert Comment.where(account_id: account_id).exists?
-    assert Step.where(account_id: account_id).exists?
-    assert Assignment.where(account_id: account_id).exists?
-    assert Tagging.where(account_id: account_id).exists?
-    assert Watch.where(account_id: account_id).exists?
-    assert Pin.where(account_id: account_id).exists?
-    assert Reaction.where(account_id: account_id).exists?
-    assert Mention.where(account_id: account_id).exists?
-    assert Closure.where(account_id: account_id).exists?
-    assert Card::Goldness.where(account_id: account_id).exists?
-    assert Card::NotNow.where(account_id: account_id).exists?
-    assert Card::ActivitySpike.where(account_id: account_id).exists?
-    assert Notification.where(account_id: account_id).exists?
-    assert Notification::Bundle.where(account_id: account_id).exists?
-    assert Filter.where(account_id: account_id).exists?
-    assert User::Settings.where(user_id: user.id).exists?
-    assert ActiveStorage::Attachment.where(account_id: account_id).exists?
-    assert ActiveStorage::Blob.where(account_id: account_id).exists?
-    assert ActionText::RichText.where(account_id: account_id).exists?
+    assert_predicate User.where(account_id: account_id), :exists?
+    assert_predicate Board.where(account_id: account_id), :exists?
+    assert_predicate Card.where(account_id: account_id), :exists?
+    assert_predicate Tag.where(account_id: account_id), :exists?
+    assert_predicate Column.where(account_id: account_id), :exists?
+    assert_predicate Webhook.where(account_id: account_id), :exists?
+    assert_predicate Access.where(account_id: account_id), :exists?
+    assert_predicate Entropy.where(account_id: account_id), :exists?
+    assert_predicate Account::JoinCode.where(account_id: account_id), :exists?
+    assert_predicate Account::Export.where(account_id: account_id), :exists?
+    assert_predicate Search::Query.where(account_id: account_id), :exists?
+    assert_predicate Storage::Entry.where(account_id: account_id), :exists?
+    assert_predicate Board::Publication.where(account_id: account_id), :exists?
+    assert_predicate Event.where(account_id: account_id), :exists?
+    assert_predicate Webhook::Delivery.where(account_id: account_id), :exists?
+    assert_predicate Webhook::DelinquencyTracker.where(account_id: account_id), :exists?
+    assert_predicate Comment.where(account_id: account_id), :exists?
+    assert_predicate Step.where(account_id: account_id), :exists?
+    assert_predicate Assignment.where(account_id: account_id), :exists?
+    assert_predicate Tagging.where(account_id: account_id), :exists?
+    assert_predicate Watch.where(account_id: account_id), :exists?
+    assert_predicate Pin.where(account_id: account_id), :exists?
+    assert_predicate Reaction.where(account_id: account_id), :exists?
+    assert_predicate Mention.where(account_id: account_id), :exists?
+    assert_predicate Closure.where(account_id: account_id), :exists?
+    assert_predicate Card::Goldness.where(account_id: account_id), :exists?
+    assert_predicate Card::NotNow.where(account_id: account_id), :exists?
+    assert_predicate Card::ActivitySpike.where(account_id: account_id), :exists?
+    assert_predicate Notification.where(account_id: account_id), :exists?
+    assert_predicate Notification::Bundle.where(account_id: account_id), :exists?
+    assert_predicate Filter.where(account_id: account_id), :exists?
+    assert_predicate User::Settings.where(user_id: user.id), :exists?
+    assert_predicate ActiveStorage::Attachment.where(account_id: account_id), :exists?
+    assert_predicate ActiveStorage::Blob.where(account_id: account_id), :exists?
+    assert_predicate ActionText::RichText.where(account_id: account_id), :exists?
 
     # Flush jobs enqueued during setup (Turbo broadcasts, etc.) while records still exist
     perform_enqueued_jobs

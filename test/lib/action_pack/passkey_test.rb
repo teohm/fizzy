@@ -40,7 +40,7 @@ class ActionPack::PasskeyTest < ActiveSupport::TestCase
     @passkey.authenticate(assertion)
 
     assert_equal 5, @passkey.reload.sign_count
-    assert @passkey.backed_up?
+    assert_predicate @passkey, :backed_up?
   end
 
   test "to_public_key_credential" do

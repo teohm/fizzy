@@ -9,7 +9,7 @@ class Card::StorageLimited::PublishingTest < ActionDispatch::IntegrationTest
     post card_publish_path(cards(:unfinished_thoughts), script_name: accounts(:initech).slug)
 
     assert_response :forbidden
-    assert cards(:unfinished_thoughts).reload.drafted?
+    assert_predicate cards(:unfinished_thoughts).reload, :drafted?
   end
 
   test "can publish cards when under storage limit" do
@@ -18,7 +18,7 @@ class Card::StorageLimited::PublishingTest < ActionDispatch::IntegrationTest
     post card_publish_path(cards(:unfinished_thoughts), script_name: accounts(:initech).slug)
 
     assert_response :redirect
-    assert cards(:unfinished_thoughts).reload.published?
+    assert_predicate cards(:unfinished_thoughts).reload, :published?
   end
 
   test "staff can publish cards even when storage limit exceeded" do
@@ -30,6 +30,6 @@ class Card::StorageLimited::PublishingTest < ActionDispatch::IntegrationTest
     post card_publish_path(cards(:unfinished_thoughts), script_name: accounts(:initech).slug)
 
     assert_response :redirect
-    assert cards(:unfinished_thoughts).reload.published?
+    assert_predicate cards(:unfinished_thoughts).reload, :published?
   end
 end

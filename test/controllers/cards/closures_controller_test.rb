@@ -31,13 +31,13 @@ class Cards::ClosuresControllerTest < ActionDispatch::IntegrationTest
     post card_closure_path(card), as: :json
 
     assert_response :no_content
-    assert card.reload.closed?
+    assert_predicate card.reload, :closed?
   end
 
   test "destroy as JSON" do
     card = cards(:shipping)
 
-    assert card.closed?
+    assert_predicate card, :closed?
 
     delete card_closure_path(card), as: :json
 

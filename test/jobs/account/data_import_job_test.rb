@@ -22,7 +22,7 @@ class Account::DataImportJobTest < ActiveJob::TestCase
 
     Account::DataImportJob.perform_now(import)
 
-    assert import.reload.completed?
+    assert_predicate import.reload, :completed?
   ensure
     export_tempfile&.close
     export_tempfile&.unlink

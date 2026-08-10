@@ -63,7 +63,7 @@ class ActionPack::WebAuthn::Authenticator::DataTest < ActiveSupport::TestCase
 
   test "user_present? returns true when flag is set" do
     data = build_data_with_flags(0x01)
-    assert data.user_present?
+    assert_predicate data, :user_present?
   end
 
   test "user_present? returns false when flag is not set" do
@@ -73,7 +73,7 @@ class ActionPack::WebAuthn::Authenticator::DataTest < ActiveSupport::TestCase
 
   test "user_verified? returns true when flag is set" do
     data = build_data_with_flags(0x04)
-    assert data.user_verified?
+    assert_predicate data, :user_verified?
   end
 
   test "user_verified? returns false when flag is not set" do
@@ -83,7 +83,7 @@ class ActionPack::WebAuthn::Authenticator::DataTest < ActiveSupport::TestCase
 
   test "backup_eligible? returns true when flag is set" do
     data = build_data_with_flags(0x08)
-    assert data.backup_eligible?
+    assert_predicate data, :backup_eligible?
   end
 
   test "backup_eligible? returns false when flag is not set" do
@@ -93,7 +93,7 @@ class ActionPack::WebAuthn::Authenticator::DataTest < ActiveSupport::TestCase
 
   test "backed_up? returns true when flag is set" do
     data = build_data_with_flags(0x10)
-    assert data.backed_up?
+    assert_predicate data, :backed_up?
   end
 
   test "backed_up? returns false when flag is not set" do

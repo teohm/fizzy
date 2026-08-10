@@ -23,6 +23,6 @@ class User::SearcherTest < ActiveSupport::TestCase
       @user.remember_search("broken")
     end
 
-    assert search_result.reload.updated_at > original_updated_at
+    assert_operator search_result.reload.updated_at, :>, original_updated_at
   end
 end

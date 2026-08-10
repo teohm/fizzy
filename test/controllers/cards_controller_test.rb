@@ -44,7 +44,7 @@ class CardsControllerTest < ActionDispatch::IntegrationTest
     card = Card.last
     assert_redirected_to card_draft_path(card)
 
-    assert card.drafted?
+    assert_predicate card, :drafted?
   end
 
   test "create resumes existing draft if it exists" do

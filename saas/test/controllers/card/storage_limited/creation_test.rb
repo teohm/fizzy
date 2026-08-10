@@ -27,7 +27,7 @@ class Card::StorageLimited::CreationTest < ActionDispatch::IntegrationTest
     end
 
     assert_response :redirect
-    assert Card.last.drafted?
+    assert_predicate Card.last, :drafted?
   end
 
   test "can create cards via JSON when under storage limit" do

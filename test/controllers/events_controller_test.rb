@@ -31,7 +31,7 @@ class EventsControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
 
     events_shown = css_select(".event").count
-    assert events_shown > 0, "Should show some events"
+    assert_operator events_shown, :>, 0, "Should show some events"
 
     css_select(".event").each do |event|
       assert_includes event.text, boards(:writebook).name

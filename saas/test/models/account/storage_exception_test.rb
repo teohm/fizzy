@@ -37,7 +37,7 @@ class Account::StorageExceptionTest < ActiveSupport::TestCase
     account = accounts(:initech)
     Account.any_instance.stubs(:bytes_used).returns(2.gigabytes)
 
-    assert account.exceeding_storage_limit?
+    assert_predicate account, :exceeding_storage_limit?
 
     account.add_storage_exception(5.gigabytes)
 

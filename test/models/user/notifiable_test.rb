@@ -14,7 +14,7 @@ class User::NotifiableTest < ActiveSupport::TestCase
 
     bundle = @user.notification_bundles.last
     assert_equal notification.updated_at, bundle.starts_at
-    assert bundle.pending?
+    assert_predicate bundle, :pending?
   end
 
   test "bundle method finds existing bundle within aggregation period" do

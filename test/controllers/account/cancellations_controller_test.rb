@@ -20,7 +20,7 @@ class Account::CancellationsControllerTest < ActionDispatch::IntegrationTest
 
     assert_redirected_to session_menu_path(script_name: nil)
     assert_equal "Account deleted", flash[:notice]
-    assert @account.reload.cancelled?
+    assert_predicate @account.reload, :cancelled?
     assert_equal @user, @account.cancellation.initiated_by
   end
 

@@ -30,20 +30,20 @@ class ApplicationPushNotificationTest < ActiveSupport::TestCase
 
   test "enabled on production" do
     with_rails_env "production" do
-      assert ApplicationPushNotification.enable?
+      assert_predicate ApplicationPushNotification, :enable?
     end
   end
 
   test "enabled on beta" do
     with_rails_env "beta" do
-      assert ApplicationPushNotification.enable?
+      assert_predicate ApplicationPushNotification, :enable?
     end
   end
 
   test "ENABLE_NATIVE_PUSH=true enables push in otherwise-disabled environments" do
     with_env "ENABLE_NATIVE_PUSH" => "true" do
       with_rails_env "staging" do
-        assert ApplicationPushNotification.enable?
+        assert_predicate ApplicationPushNotification, :enable?
       end
     end
   end

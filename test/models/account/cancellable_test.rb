@@ -13,7 +13,7 @@ class Account::CancellableTest < ActiveSupport::TestCase
       end
     end
 
-    assert @account.cancelled?
+    assert_predicate @account, :cancelled?
     assert_equal @user, @account.cancellation.initiated_by
   end
 
@@ -40,13 +40,13 @@ class Account::CancellableTest < ActiveSupport::TestCase
 
     @account.cancel(initiated_by: @user)
 
-    assert @account.cancelled?
+    assert_predicate @account, :cancelled?
   end
 
   test "reactivate" do
     @account.cancel(initiated_by: @user)
 
-    assert @account.cancelled?
+    assert_predicate @account, :cancelled?
 
     @account.reactivate
     @account.reload

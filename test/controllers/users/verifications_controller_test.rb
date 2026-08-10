@@ -19,6 +19,6 @@ class Users::VerificationsControllerTest < ActionDispatch::IntegrationTest
     post users_verifications_path
 
     assert_redirected_to new_users_join_path
-    assert user.reload.verified?
+    assert_predicate user.reload, :verified?
   end
 end

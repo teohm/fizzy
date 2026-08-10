@@ -115,7 +115,7 @@ class ZipFileTest < ActiveSupport::TestCase
     reader.read("hello.txt") do |io|
       assert_not io.eof?
       io.read
-      assert io.eof?
+      assert_predicate io, :eof?
     end
   end
 

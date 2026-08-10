@@ -33,7 +33,7 @@ class AccountTest < ActiveSupport::TestCase
       end
 
       assert_not_nil account
-      assert account.persisted?
+      assert_predicate account, :persisted?
       assert_equal ActiveRecord::FixtureSet.identify("account-create-with-owner-test"), account.external_account_id
       assert_equal "Account Create With Owner", account.name
 
@@ -41,11 +41,11 @@ class AccountTest < ActiveSupport::TestCase
       assert_equal "David", owner.name
       assert_equal "david@37signals.com", owner.identity.email_address
       assert_equal "owner", owner.role
-      assert owner.admin?, "owner should also be considered an admin"
+      assert_predicate owner, :admin?, "owner should also be considered an admin"
 
       assert_predicate account.system_user, :present?
 
-      assert owner.verified?, "owner should be verified on account creation"
+      assert_predicate owner, :verified?, "owner should be verified on account creation"
     end
   end
 

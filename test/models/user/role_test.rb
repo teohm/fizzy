@@ -31,10 +31,10 @@ class User::RoleTest < ActiveSupport::TestCase
   end
 
   test "owner is also considered an admin" do
-    assert users(:jason).owner?
-    assert users(:jason).admin?
+    assert_predicate users(:jason), :owner?
+    assert_predicate users(:jason), :admin?
 
-    assert users(:kevin).admin?
+    assert_predicate users(:kevin), :admin?
     assert_not users(:kevin).owner?
   end
 

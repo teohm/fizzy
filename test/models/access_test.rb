@@ -20,12 +20,12 @@ class AccessTest < ActiveSupport::TestCase
     board = boards(:writebook)
 
     # make sure we have test coverage for both cards and comments
-    assert kevin.notifications.map(&:source).map(&:eventable_type).uniq.sort == [ "Card", "Comment" ]
+    assert_equal [ "Card", "Comment" ], kevin.notifications.map(&:source).map(&:eventable_type).uniq.sort
 
     notifications_to_be_destroyed = kevin.notifications.select do |notification|
       notification.card&.board == board
     end
-    assert notifications_to_be_destroyed.any?
+    assert_predicate notifications_to_be_destroyed, :any?
 
     kevin_access = accesses(:writebook_kevin)
 
@@ -45,12 +45,12 @@ class AccessTest < ActiveSupport::TestCase
     board = boards(:writebook)
 
     # make sure we have test coverage for both cards and comments
-    assert david.mentions.map(&:source_type).uniq.sort == [ "Card", "Comment" ]
+    assert_equal [ "Card", "Comment" ], david.mentions.map(&:source_type).uniq.sort
 
     mentions_to_be_destroyed = david.mentions.select do |mention|
       mention.card&.board == board
     end
-    assert mentions_to_be_destroyed.any?
+    assert_predicate mentions_to_be_destroyed, :any?
 
     david_access = accesses(:writebook_david)
 

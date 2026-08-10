@@ -18,7 +18,7 @@ class Boards::PublicationsControllerTest < ActionDispatch::IntegrationTest
 
   test "unpublish a board" do
     @board.publish
-    assert @board.published?
+    assert_predicate @board, :published?
 
     assert_changes -> { @board.reload.published? }, from: true, to: false do
       delete board_publication_path(@board, format: :turbo_stream)
@@ -43,7 +43,7 @@ class Boards::PublicationsControllerTest < ActionDispatch::IntegrationTest
 
   test "unpublish a board via JSON" do
     @board.publish
-    assert @board.published?
+    assert_predicate @board, :published?
 
     assert_changes -> { @board.reload.published? }, from: true, to: false do
       delete board_publication_path(@board), as: :json
@@ -67,11 +67,11 @@ class Boards::PublicationsControllerTest < ActionDispatch::IntegrationTest
     logout_and_sign_in_as :jz
 
     @board.publish
-    assert @board.published?
+    assert_predicate @board, :published?
 
     delete board_publication_path(@board, format: :turbo_stream)
 
     assert_response :forbidden
-    assert @board.reload.published?
+    assert_predicate @board.reload, :published?
   end
 end

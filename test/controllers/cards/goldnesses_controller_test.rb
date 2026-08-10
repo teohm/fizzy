@@ -27,13 +27,13 @@ class Cards::GoldnessesControllerTest < ActionDispatch::IntegrationTest
     post card_goldness_path(card), as: :json
 
     assert_response :no_content
-    assert card.reload.golden?
+    assert_predicate card.reload, :golden?
   end
 
   test "destroy as JSON" do
     card = cards(:logo)
 
-    assert card.golden?
+    assert_predicate card, :golden?
 
     delete card_goldness_path(card), as: :json
 

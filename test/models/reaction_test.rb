@@ -16,7 +16,7 @@ class ReactionTest < ActiveSupport::TestCase
     comment.reactions.create!(content: "👍")
     reaction_ids = comment.reactions.pluck(:id)
 
-    assert reaction_ids.any?, "Expected comment to have reactions"
+    assert_predicate reaction_ids, :any?, "Expected comment to have reactions"
 
     comment.destroy
 
@@ -35,7 +35,7 @@ class ReactionTest < ActiveSupport::TestCase
     card = cards(:logo)
     reaction_ids = card.reactions.pluck(:id)
 
-    assert reaction_ids.any?, "Expected card to have reactions"
+    assert_predicate reaction_ids, :any?, "Expected card to have reactions"
 
     card.destroy
 
