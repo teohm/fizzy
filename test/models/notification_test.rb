@@ -62,7 +62,7 @@ class NotificationTest < ActiveSupport::TestCase
       perform_enqueued_jobs
     end
 
-    assert broadcasts.any?, "Expected at least one broadcast"
+    assert_predicate broadcasts, :any?, "Expected at least one broadcast"
     html = broadcasts.last.to_s
     assert_includes html, "href=\"#{account.slug}/", "Broadcast should include account slug in URLs"
   end

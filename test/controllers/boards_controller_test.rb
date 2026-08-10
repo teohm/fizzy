@@ -105,7 +105,7 @@ class BoardsControllerTest < ActionDispatch::IntegrationTest
     patch board_path(board), params: { board: { name: "Bugs", all_access: true } }
 
     assert_redirected_to edit_board_path(board)
-    assert board.reload.all_access?
+    assert_predicate board.reload, :all_access?
     assert_equal accounts("37s").users.active.sort, board.users.sort
   end
 
@@ -387,8 +387,8 @@ class BoardsControllerTest < ActionDispatch::IntegrationTest
 
     json = @response.parsed_body
     first_board = json.first
-    assert first_board["creator"].present?
-    assert first_board["creator"]["email_address"].present?
+    assert_predicate first_board["creator"], :present?
+    assert_predicate first_board["creator"]["email_address"], :present?
   end
 
   private

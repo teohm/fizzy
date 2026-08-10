@@ -192,8 +192,8 @@ class WebhooksControllerTest < ActionDispatch::IntegrationTest
     end
 
     assert_response :unprocessable_entity
-    assert @response.parsed_body["name"].present?
-    assert @response.parsed_body["url"].present?
+    assert_predicate @response.parsed_body["name"], :present?
+    assert_predicate @response.parsed_body["url"], :present?
   end
 
   test "update as JSON" do
@@ -225,7 +225,7 @@ class WebhooksControllerTest < ActionDispatch::IntegrationTest
     }, as: :json
 
     assert_response :unprocessable_entity
-    assert @response.parsed_body["name"].present?
+    assert_predicate @response.parsed_body["name"], :present?
   end
 
   test "update does not change url as JSON" do

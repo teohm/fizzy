@@ -14,7 +14,7 @@ class Board::PublishableTest < ActiveSupport::TestCase
   test "published?" do
     assert_not boards(:writebook).published?
     boards(:writebook).publish
-    assert boards(:writebook).published?
+    assert_predicate boards(:writebook), :published?
   end
 
   test "publish and unpublish" do
@@ -24,7 +24,7 @@ class Board::PublishableTest < ActiveSupport::TestCase
       boards(:writebook).publish
     end
 
-    assert boards(:writebook).published?
+    assert_predicate boards(:writebook), :published?
 
     assert_difference -> { Board::Publication.count }, -1 do
       boards(:writebook).unpublish

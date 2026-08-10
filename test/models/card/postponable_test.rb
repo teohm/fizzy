@@ -9,10 +9,10 @@ class Card::PostponableTest < ActiveSupport::TestCase
     card = cards(:logo)
 
     assert_not card.postponed?
-    assert card.active?
+    assert_predicate card, :active?
 
     card.postpone
-    assert card.postponed?
+    assert_predicate card, :postponed?
     assert_not card.active?
   end
 
@@ -26,7 +26,7 @@ class Card::PostponableTest < ActiveSupport::TestCase
     end
 
     assert_equal users(:david), card.not_now.user
-    assert card.events.last.action.card_postponed?
+    assert_predicate card.events.last.action, :card_postponed?
 
     assert_changes -> { card.reload.postponed? }, to: false do
       card.resume
@@ -42,7 +42,7 @@ class Card::PostponableTest < ActiveSupport::TestCase
       end
     end
 
-    assert card.events.last.action.card_auto_postponed?
+    assert_predicate card.events.last.action, :card_auto_postponed?
   end
 
   test "scopes" do

@@ -97,7 +97,7 @@ class MentionsTest < ActiveSupport::TestCase
     perform_enqueued_jobs only: Mention::CreateJob do
       card = boards(:writebook).cards.create title: "Cleanup", description: "Did you finish up with the cleanup #{mention_html_for(users(:kevin))}?"
       card.published!
-      assert card.watchers.include?(users(:kevin))
+      assert_includes card.watchers, users(:kevin)
     end
   end
 

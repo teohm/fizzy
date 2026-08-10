@@ -5,7 +5,9 @@ class Webhooks::DeliveriesControllerTest < ActionDispatch::IntegrationTest
     sign_in_as :kevin
   end
 
-  test "index as JSON" do
+  # One response, asserted field by field: the shape of the JSON is the contract, so
+  # checking a subset of it would leave the rest free to change unnoticed.
+  test "index as JSON" do # rubocop:disable Minitest/MultipleAssertions
     webhook = webhooks(:active)
     delivery = webhook_deliveries(:successfully_completed)
     webhook_timestamp = delivery.event.created_at.utc.iso8601

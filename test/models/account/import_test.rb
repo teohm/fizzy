@@ -37,7 +37,7 @@ class Account::ImportTest < ActiveSupport::TestCase
     export = Account::Export.create!(account: source_account, user: exporter)
     export.build
 
-    assert export.completed?
+    assert_predicate export, :completed?
 
     export_tempfile = Tempfile.new([ "export", ".zip" ])
     export.file.open { |f| FileUtils.cp(f.path, export_tempfile.path) }
@@ -54,7 +54,7 @@ class Account::ImportTest < ActiveSupport::TestCase
     assert_not import.failed?
 
     import.process
-    assert import.completed?
+    assert_predicate import, :completed?
 
     assert_equal source_account_digest, account_digest(target_account)
   ensure
@@ -97,7 +97,7 @@ class Account::ImportTest < ActiveSupport::TestCase
 
     assert_raises(NoMethodError) { import.check }
 
-    assert import.failed?
+    assert_predicate import, :failed?
     assert_nil import.failure_reason
   end
 
@@ -119,7 +119,7 @@ class Account::ImportTest < ActiveSupport::TestCase
 
     assert_raises(Account::DataTransfer::RecordSet::IntegrityError) { import.check }
 
-    assert import.failed?
+    assert_predicate import, :failed?
     assert_equal "invalid_export", import.failure_reason
   ensure
     tempfile&.close
@@ -140,7 +140,7 @@ class Account::ImportTest < ActiveSupport::TestCase
 
     assert_raises(ZipFile::InvalidFileError) { import.check }
 
-    assert import.failed?
+    assert_predicate import, :failed?
     assert_equal "invalid_export", import.failure_reason
   ensure
     tempfile&.close
@@ -167,7 +167,7 @@ class Account::ImportTest < ActiveSupport::TestCase
 
     assert_raises(Account::DataTransfer::RecordSet::ConflictError) { import.check }
 
-    assert import.failed?
+    assert_predicate import, :failed?
     assert_equal "conflict", import.failure_reason
   ensure
     export_tempfile&.close
@@ -209,7 +209,7 @@ class Account::ImportTest < ActiveSupport::TestCase
     assert_not import.failed?
 
     import.process
-    assert import.completed?
+    assert_predicate import, :completed?
 
     imported_blob = ActiveStorage::Blob.find_by(account: target_account, filename: "logo.png")
     assert_not_nil imported_blob

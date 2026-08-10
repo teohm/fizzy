@@ -8,7 +8,7 @@ class Card::StatusesTest < ActiveSupport::TestCase
   test "cards start out in a `drafted` state" do
     card = boards(:writebook).cards.create! creator: users(:kevin), title: "Newly created card"
 
-    assert card.drafted?
+    assert_predicate card, :drafted?
   end
 
   test "an event is created when a card is created in the published state" do
@@ -43,7 +43,7 @@ class Card::StatusesTest < ActiveSupport::TestCase
       boards(:writebook).cards.create! creator: users(:kevin), title: "Newly created card"
     end
 
-    assert card.drafted?
+    assert_predicate card, :drafted?
     assert_equal 1.week.ago, card.created_at
 
     card.publish
@@ -53,18 +53,18 @@ class Card::StatusesTest < ActiveSupport::TestCase
 
   test "detect drafts that were just published" do
     card = boards(:writebook).cards.create! creator: users(:kevin), title: "Draft Card"
-    assert card.drafted?
+    assert_predicate card, :drafted?
     assert_not card.was_just_published?
 
     card.publish
 
-    assert card.was_just_published?
+    assert_predicate card, :was_just_published?
     assert_not Card.find(card.id).was_just_published?
   end
 
   test "detect cards that were created and published" do
     card = boards(:writebook).cards.create! creator: users(:kevin), title: "Published Card", status: :published
-    assert card.was_just_published?
+    assert_predicate card, :was_just_published?
 
     assert_not Card.find(card.id).was_just_published?
   end

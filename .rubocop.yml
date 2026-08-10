@@ -1,3 +1,4 @@
+# Parked offences, empty today. See the file for what belongs in it and what does not.
 inherit_from: .rubocop_todo.yml
 
 # Omakase Ruby styling for Rails
@@ -19,8 +20,8 @@ AllCops:
   # build when they upgrade the gem. Nothing here was ever green under those cops, so that
   # history is no reason to skip them: `pending` is a property of this config rather than of
   # how long we have had the gem, and without this line a first install runs 15 of the 55
-  # and prints a 34-line warning on every run. What they currently find is parked in
-  # .rubocop_todo.yml, to be worked off a cop at a time.
+  # and prints a 34-line warning on every run. The six we do not want are switched off
+  # below, each with its reason; the rest hold.
   NewCops: enable
   Exclude:
     - 'db/migrate/**/*'
@@ -32,3 +33,32 @@ Style/NegatedIf:
   Enabled: true
 Style/NegatedUnless:
   Enabled: true
+
+# Formatting, and this repo does not lint formatting: omakase switches off the whole Layout
+# department deliberately. Letting a blank-line rule in through a test plugin would reverse
+# that decision by accident, at a cost of 754 lines of churn.
+Minitest/EmptyLineBeforeAssertionMethods:
+  Enabled: false
+
+# Both rewrite `assert_equal true, x` into `assert x`, which passes on any truthy value --
+# and on `nil`, for the refute half. Everywhere these fire, that is the weaker assertion: a
+# CBOR decoder that has to return `false` rather than fail to decode, JSON booleans in an
+# API response, a method documented to return true or false. Trading those for an idiom
+# would trade away what the test is for.
+Minitest/AssertTruthy:
+  Enabled: false
+Minitest/RefuteFalse:
+  Enabled: false
+
+# Design pressure rather than spelling, so it is the one cop here worth tuning instead of
+# taking as shipped. The gem's Max of 3 leaves 218 existing tests (13% of the suite) failing,
+# and a cap an eighth of the suite has to opt out of is one the codebase does not agree with
+# -- tests here assert a whole outcome rather than one field of it. 15 covers 99.7% of them
+# and still catches a test that has quietly become several, which is what the cop is worth
+# having for. The four above it carry an inline disable saying why.
+Minitest/MultipleAssertions:
+  Max: 15
+
+# Minitest/NoAssertions and Minitest/NoTestCases stay off, as the gem itself has them: the
+# first cannot see Mocha's `expects(...).once`, which is the real assertion in ~29 tests
+# here, so switching it on would report them as unasserted.

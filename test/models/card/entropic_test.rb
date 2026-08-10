@@ -42,7 +42,7 @@ class Card::EntropicTest < ActiveSupport::TestCase
       Card.auto_postpone_all_due
     end
 
-    assert cards(:logo).reload.postponed?
+    assert_predicate cards(:logo).reload, :postponed?
     assert_equal accounts("37s").system_user, cards(:logo).postponed_by
     assert_not cards(:shipping).reload.postponed?
   end
@@ -55,7 +55,7 @@ class Card::EntropicTest < ActiveSupport::TestCase
       Card.auto_postpone_all_due
     end
 
-    assert cards(:logo).reload.postponed?
+    assert_predicate cards(:logo).reload, :postponed?
     assert_not cards(:shipping).reload.postponed?
   end
 
@@ -75,8 +75,8 @@ class Card::EntropicTest < ActiveSupport::TestCase
 
     Card.auto_postpone_all_due
 
-    assert cards(:logo).reload.postponed?
-    assert cards(:radio).reload.postponed?
+    assert_predicate cards(:logo).reload, :postponed?
+    assert_predicate cards(:radio).reload, :postponed?
   end
 
   test "postponing_soon scope works properly cross-account" do

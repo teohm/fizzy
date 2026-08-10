@@ -184,19 +184,19 @@ class ActionPack::WebAuthn::CborDecoderTest < ActiveSupport::TestCase
   end
 
   test "decodes half-precision float 0.0" do
-    assert_equal 0.0, decode("f90000")
+    assert_in_delta(0.0, decode("f90000"))
   end
 
   test "decodes half-precision float 1.0" do
-    assert_equal 1.0, decode("f93c00")
+    assert_in_delta(1.0, decode("f93c00"))
   end
 
   test "decodes half-precision float 1.5" do
-    assert_equal 1.5, decode("f93e00")
+    assert_in_delta(1.5, decode("f93e00"))
   end
 
   test "decodes half-precision float -4.0" do
-    assert_equal(-4.0, decode("f9c400"))
+    assert_in_delta(-4.0, decode("f9c400"))
   end
 
   test "decodes half-precision positive infinity" do
@@ -208,7 +208,7 @@ class ActionPack::WebAuthn::CborDecoderTest < ActiveSupport::TestCase
   end
 
   test "decodes single-precision float 100000.0" do
-    assert_equal 100000.0, decode("fa47c35000")
+    assert_in_delta(100000.0, decode("fa47c35000"))
   end
 
   test "decodes single-precision positive infinity" do

@@ -223,7 +223,7 @@ class Storage::AttachmentTrackingTest < ActiveSupport::TestCase
 
     board_bytes = @board.send(:calculate_real_storage_bytes)
 
-    assert board_bytes >= blob.byte_size, "board bytes should include comment embed bytes"
+    assert_operator board_bytes, :>=, blob.byte_size, "board bytes should include comment embed bytes"
   end
 
   test "account calculate_real_storage_bytes includes comment embeds via boards" do
@@ -237,7 +237,7 @@ class Storage::AttachmentTrackingTest < ActiveSupport::TestCase
 
     account_bytes = @account.send(:calculate_real_storage_bytes)
 
-    assert account_bytes >= blob.byte_size, "account bytes should include comment embed bytes"
+    assert_operator account_bytes, :>=, blob.byte_size, "account bytes should include comment embed bytes"
   end
 
 

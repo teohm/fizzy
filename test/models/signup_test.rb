@@ -4,7 +4,7 @@ class SignupTest < ActiveSupport::TestCase
   test "validates email format for identity creation" do
     signup = Signup.new(email_address: "not-an-email")
     assert_not signup.valid?(:identity_creation)
-    assert signup.errors[:email_address].any?
+    assert_predicate signup.errors[:email_address], :any?
 
     signup = Signup.new(email_address: "valid@example.com")
     assert signup.valid?(:identity_creation)
@@ -23,7 +23,7 @@ class SignupTest < ActiveSupport::TestCase
     assert_kind_of MagicLink, magic_link
     assert_empty signup.errors
     assert signup.identity
-    assert signup.identity.persisted?
+    assert_predicate signup.identity, :persisted?
 
     signup_existing = Signup.new(email_address: "brian@example.com")
 
@@ -36,7 +36,7 @@ class SignupTest < ActiveSupport::TestCase
     assert_kind_of MagicLink, magic_link
 
     signup_invalid = Signup.new(email_address: "")
-    assert_raises do
+    assert_raises ActiveRecord::RecordInvalid do
       signup_invalid.create_identity
     end
   end
@@ -66,8 +66,8 @@ class SignupTest < ActiveSupport::TestCase
     Current.without_account do
       signup = Signup.new
       assert_not signup.complete
-      assert signup.errors[:full_name].any?
-      assert signup.errors[:identity].any?
+      assert_predicate signup.errors[:full_name], :any?
+      assert_predicate signup.errors[:identity], :any?
       assert_nil signup.account
       assert_nil signup.user
     end
@@ -80,7 +80,7 @@ class SignupTest < ActiveSupport::TestCase
 
       assert_not signup.complete
 
-      assert signup.errors[:full_name].any?
+      assert_predicate signup.errors[:full_name], :any?
       assert_nil signup.account
       assert_nil signup.user
     end

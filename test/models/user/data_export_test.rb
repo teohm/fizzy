@@ -6,8 +6,8 @@ class User::DataExportTest < ActiveSupport::TestCase
 
     export.build
 
-    assert export.completed?
-    assert export.file.attached?
+    assert_predicate export, :completed?
+    assert_predicate export.file, :attached?
     assert_equal "application/zip", export.file.content_type
   end
 
@@ -16,7 +16,7 @@ class User::DataExportTest < ActiveSupport::TestCase
 
     export.build
 
-    assert export.completed?
+    assert_predicate export, :completed?
     assert_not_nil export.completed_at
   end
 
@@ -34,8 +34,8 @@ class User::DataExportTest < ActiveSupport::TestCase
 
     export.build
 
-    assert export.completed?
-    assert export.file.attached?
+    assert_predicate export, :completed?
+    assert_predicate export.file, :attached?
 
     Tempfile.create([ "test", ".zip" ]) do |temp|
       temp.binmode
@@ -44,7 +44,7 @@ class User::DataExportTest < ActiveSupport::TestCase
 
       reader = ZipKit::FileReader.read_zip_structure(io: temp)
       json_files = reader.select { |e| e.filename.end_with?(".json") }
-      assert json_files.any?, "Zip should contain at least one JSON file"
+      assert_predicate json_files, :any?, "Zip should contain at least one JSON file"
 
       extractor = json_files.first.extractor_from(temp)
       json_content = JSON.parse(extractor.extract)

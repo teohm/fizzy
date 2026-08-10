@@ -26,7 +26,7 @@ class IdentityTest < ActiveSupport::TestCase
     invalid_emails.each do |email|
       identity = Identity.new(email_address: email)
       assert_not identity.valid?, "expected #{email.inspect} to be invalid"
-      assert identity.errors[:email_address].any?, "expected error on email_address for #{email.inspect}"
+      assert_predicate identity.errors[:email_address], :any?, "expected error on email_address for #{email.inspect}"
     end
   end
 

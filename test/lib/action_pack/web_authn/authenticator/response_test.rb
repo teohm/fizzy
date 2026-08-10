@@ -37,7 +37,7 @@ class ActionPack::WebAuthn::Authenticator::ResponseTest < ActiveSupport::TestCas
   end
 
   test "valid? returns true when challenge and origin match" do
-    assert @response.valid?
+    assert_predicate @response, :valid?
   end
 
   test "valid? returns false when challenge in client data is invalid" do

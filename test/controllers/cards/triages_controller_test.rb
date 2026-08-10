@@ -38,7 +38,7 @@ class Cards::TriagesControllerTest < ActionDispatch::IntegrationTest
   test "destroy as JSON" do
     card = cards(:shipping)
 
-    assert card.column.present?
+    assert_predicate card.column, :present?
 
     delete card_triage_path(card), as: :json
 

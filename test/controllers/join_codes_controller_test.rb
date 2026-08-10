@@ -44,7 +44,7 @@ class JoinCodesControllerTest < ActionDispatch::IntegrationTest
     sign_in_as :jz
 
     assert identity.users.exists?(account: @account), "JZ should be a member of 37s for this test"
-    assert identity.users.find_by!(account: @account).setup?, "JZ's user should be setup for this test"
+    assert_predicate identity.users.find_by!(account: @account), :setup?, "JZ's user should be setup for this test"
 
     assert_no_difference -> { Identity.count } do
       assert_no_difference -> { User.count } do

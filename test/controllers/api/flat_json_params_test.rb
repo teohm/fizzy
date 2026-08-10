@@ -9,7 +9,7 @@ class FlatJsonParamsTest < ActionDispatch::IntegrationTest
     put user_role_path(users(:david)), params: { role: "admin" }, as: :json
 
     assert_response :no_content
-    assert users(:david).reload.admin?
+    assert_predicate users(:david).reload, :admin?
   end
 
   test "update notification settings with flat JSON" do

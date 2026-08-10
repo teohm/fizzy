@@ -23,7 +23,7 @@ class Account::QueenbeeIntegrationTest < ActiveSupport::TestCase
   test "cancel! creates cancellation attributed to system user" do
     @account.cancel!
 
-    assert @account.cancelled?
+    assert_predicate @account, :cancelled?
     assert_equal @account.system_user, @account.cancellation.initiated_by
   end
 
@@ -40,12 +40,12 @@ class Account::QueenbeeIntegrationTest < ActiveSupport::TestCase
 
     @account.reactivate!
     @account.reload
-    assert @account.active?
+    assert_predicate @account, :active?
   end
 
   test "deactivate! cancels the account" do
     @account.deactivate!
-    assert @account.cancelled?
+    assert_predicate @account, :cancelled?
   end
 
   test "owner_name and owner_email from account owner" do

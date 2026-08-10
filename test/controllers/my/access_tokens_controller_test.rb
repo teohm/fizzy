@@ -25,11 +25,11 @@ class My::AccessTokensControllerTest < ActionDispatch::IntegrationTest
     end
     assert_response :created
     body = @response.parsed_body
-    assert body["id"].present?
-    assert body["token"].present?
+    assert_predicate body["id"], :present?
+    assert_predicate body["token"], :present?
     assert_equal "Fizzy CLI", body["description"]
     assert_equal "write", body["permission"]
-    assert body["created_at"].present?
+    assert_predicate body["created_at"], :present?
   end
 
   test "create new token via JSON with bearer token" do
@@ -41,7 +41,7 @@ class My::AccessTokensControllerTest < ActionDispatch::IntegrationTest
     end
     assert_response :created
     body = @response.parsed_body
-    assert body["token"].present?
+    assert_predicate body["token"], :present?
     assert_equal "Fizzy CLI", body["description"]
     assert_equal "read", body["permission"]
   end

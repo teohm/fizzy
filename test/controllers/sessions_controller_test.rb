@@ -41,7 +41,7 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
       end
 
       assert_redirected_to session_magic_link_path
-      assert MagicLink.last.for_sign_up?
+      assert_predicate MagicLink.last, :for_sign_up?
     end
   end
 
@@ -104,8 +104,8 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
         end
       end
       assert_response :created
-      assert @response.parsed_body["pending_authentication_token"].present?
-      assert MagicLink.last.for_sign_up?
+      assert_predicate @response.parsed_body["pending_authentication_token"], :present?
+      assert_predicate MagicLink.last, :for_sign_up?
     end
   end
 

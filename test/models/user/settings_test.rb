@@ -15,14 +15,14 @@ class User::SettingsTest < ActiveSupport::TestCase
 
   test "changing the bundle email frequency will deliver pending bundles" do
     bundle = @user.notification_bundles.create!
-    assert bundle.pending?
+    assert_predicate bundle, :pending?
 
     freeze_time Time.current do
       perform_enqueued_jobs only: Notification::Bundle::DeliverJob do
         @settings.update!(bundle_email_frequency: :daily)
       end
 
-      assert bundle.reload.delivered?
+      assert_predicate bundle.reload, :delivered?
       assert_equal Time.current, bundle.ends_at
     end
   end
@@ -34,7 +34,7 @@ class User::SettingsTest < ActiveSupport::TestCase
       @settings.update!(updated_at: 1.hour.from_now)
     end
 
-    assert bundle.reload.pending?
+    assert_predicate bundle.reload, :pending?
   end
 
   test "bundling_emails?" do
@@ -42,7 +42,7 @@ class User::SettingsTest < ActiveSupport::TestCase
     assert_not @user.settings.bundling_emails?
 
     @settings.update!(bundle_email_frequency: :every_few_hours)
-    assert @user.settings.bundling_emails?
+    assert_predicate @user.settings, :bundling_emails?
 
     @user.update!(role: :system)
     assert_not @user.settings.bundling_emails?, "System users should not receive bundled emails"

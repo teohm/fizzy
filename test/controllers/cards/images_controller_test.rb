@@ -9,7 +9,7 @@ class Cards::ImagesControllerTest < ActionDispatch::IntegrationTest
     card = cards(:logo)
     card.image.attach(io: file_fixture("moon.jpg").open, filename: "moon.jpg")
 
-    assert card.image.attached?
+    assert_predicate card.image, :attached?
 
     delete card_image_path(card)
 
@@ -21,7 +21,7 @@ class Cards::ImagesControllerTest < ActionDispatch::IntegrationTest
     card = cards(:logo)
     card.image.attach(io: file_fixture("moon.jpg").open, filename: "moon.jpg")
 
-    assert card.image.attached?
+    assert_predicate card.image, :attached?
 
     delete card_image_path(card), as: :json
 

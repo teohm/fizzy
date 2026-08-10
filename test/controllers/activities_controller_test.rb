@@ -11,7 +11,7 @@ class ActivitiesControllerTest < ActionDispatch::IntegrationTest
 
     body = @response.parsed_body
     assert_kind_of Array, body
-    assert body.any?
+    assert_predicate body, :any?
 
     event = body.first
     assert_includes event.keys, "id"
@@ -56,7 +56,7 @@ class ActivitiesControllerTest < ActionDispatch::IntegrationTest
     assert_not_nil item
     assert_equal "Comment", item["eventable_type"]
     assert_equal card_url(event.eventable.card, anchor: ActionView::RecordIdentifier.dom_id(event.eventable)), item["url"]
-    assert item["eventable"]["body"].present?
+    assert_predicate item["eventable"]["body"], :present?
   end
 
   test "index includes board and creator at top level" do
@@ -64,10 +64,10 @@ class ActivitiesControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
 
     item = @response.parsed_body.first
-    assert item["board"]["id"].present?
-    assert item["board"]["name"].present?
-    assert item["creator"]["id"].present?
-    assert item["creator"]["name"].present?
+    assert_predicate item["board"]["id"], :present?
+    assert_predicate item["board"]["name"], :present?
+    assert_predicate item["creator"]["id"], :present?
+    assert_predicate item["creator"]["name"], :present?
   end
 
   test "index normalizes particulars for card_assigned" do
@@ -170,7 +170,7 @@ class ActivitiesControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
 
     body = @response.parsed_body
-    assert body.any?
+    assert_predicate body, :any?
     assert body.all? { |e| e["creator"]["id"] == users(:kevin).id }
   end
 
@@ -189,7 +189,7 @@ class ActivitiesControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
 
     body = @response.parsed_body
-    assert body.any?
+    assert_predicate body, :any?
     assert body.all? { |e| e["board"]["id"] == boards(:writebook).id }
   end
 
@@ -198,7 +198,7 @@ class ActivitiesControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
 
     body = @response.parsed_body
-    assert body.any?
+    assert_predicate body, :any?
     assert body.all? { |e| e["creator"]["id"] == users(:david).id }
     assert body.all? { |e| e["board"]["id"] == boards(:writebook).id }
   end
@@ -235,7 +235,7 @@ class ActivitiesControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
 
     link_header = @response.headers["Link"]
-    assert link_header.present?, "Expected a Link header for paginated results"
+    assert_predicate link_header, :present?, "Expected a Link header for paginated results"
     assert_match(/rel="next"/, link_header)
   end
 

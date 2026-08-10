@@ -21,7 +21,7 @@ class Storage::NoReuseTest < ActiveSupport::TestCase
     # First attachment succeeds
     card1 = @board.cards.create!(title: "Card 1", creator: users(:david))
     card1.image.attach(blob)
-    assert card1.image.attached?
+    assert_predicate card1.image, :attached?
 
     # Second attachment of same blob fails
     card2 = @board.cards.create!(title: "Card 2", creator: users(:david))
@@ -67,7 +67,7 @@ class Storage::NoReuseTest < ActiveSupport::TestCase
       card.image.purge
     end
 
-    assert card.reload.updated_at > original_updated_at
+    assert_operator card.reload.updated_at, :>, original_updated_at
   end
 
   test "purge_later touches the record to invalidate cache" do
@@ -80,7 +80,7 @@ class Storage::NoReuseTest < ActiveSupport::TestCase
       card.image.purge_later
     end
 
-    assert card.reload.updated_at > original_updated_at
+    assert_operator card.reload.updated_at, :>, original_updated_at
   end
 
   test "purge_later does not purge blob when still attached elsewhere" do
@@ -167,7 +167,7 @@ class Storage::NoReuseTest < ActiveSupport::TestCase
     user.avatar.attach(blob)
 
     # Should succeed - avatars are not storage-tracked
-    assert user.avatar.attached?
+    assert_predicate user.avatar, :attached?
   end
 
   test "allows multiple attachments of same blob to untracked record types" do
@@ -180,12 +180,12 @@ class Storage::NoReuseTest < ActiveSupport::TestCase
     # First attachment to untracked (avatar)
     user1 = users(:david)
     user1.avatar.attach(blob)
-    assert user1.avatar.attached?
+    assert_predicate user1.avatar, :attached?
 
     # Second attachment to untracked (another avatar) should work
     # since no-reuse only checks tracked contexts
     user2 = users(:jz)
     user2.avatar.attach(blob)
-    assert user2.avatar.attached?
+    assert_predicate user2.avatar, :attached?
   end
 end

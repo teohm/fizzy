@@ -13,7 +13,7 @@ class Push::SubscriptionTest < ActiveSupport::TestCase
       auth_key: "test_auth"
     )
 
-    assert subscription.valid?
+    assert_predicate subscription, :valid?
   end
 
   test "rejects endpoint with non-https scheme" do
@@ -110,7 +110,7 @@ class Push::SubscriptionTest < ActiveSupport::TestCase
         auth_key: "test_auth"
       )
 
-      assert subscription.valid?, "Expected #{endpoint} to be valid, got errors: #{subscription.errors.full_messages}"
+      assert_predicate subscription, :valid?, "Expected #{endpoint} to be valid, got errors: #{subscription.errors.full_messages}"
     end
   end
 end

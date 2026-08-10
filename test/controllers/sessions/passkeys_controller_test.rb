@@ -22,7 +22,7 @@ class Sessions::PasskeysControllerTest < ActionDispatch::IntegrationTest
       post session_passkey_url, params: build_assertion_params(challenge: challenge, credential: @credential)
 
       assert_response :redirect
-      assert cookies[:session_token].present?
+      assert_predicate cookies[:session_token], :present?
       assert_redirected_to landing_path
     end
   end
@@ -77,7 +77,7 @@ class Sessions::PasskeysControllerTest < ActionDispatch::IntegrationTest
       post session_passkey_url(format: :json), params: build_assertion_params(challenge: challenge, credential: @credential)
 
       assert_response :success
-      assert @response.parsed_body["session_token"].present?
+      assert_predicate @response.parsed_body["session_token"], :present?
     end
   end
 

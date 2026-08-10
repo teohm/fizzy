@@ -7,7 +7,7 @@ class Card::GoldenTest < ActiveSupport::TestCase
   end
 
   test "check whether a card is golden" do
-    assert @golden.golden?
+    assert_predicate @golden, :golden?
     assert_not @non_golden.golden?
   end
 
@@ -47,7 +47,7 @@ class Card::GoldenTest < ActiveSupport::TestCase
       @non_golden.gild
     end
 
-    assert @non_golden.reload.updated_at > card_updated_at
-    assert board.reload.updated_at > board_updated_at
+    assert_operator @non_golden.reload.updated_at, :>, card_updated_at
+    assert_operator board.reload.updated_at, :>, board_updated_at
   end
 end

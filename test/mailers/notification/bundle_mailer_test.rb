@@ -36,7 +36,7 @@ class Notification::BundleMailerTest < ActionMailer::TestCase
 
     avatar = html.at_css("img.avatar")
     assert avatar, "Expected an img.avatar element"
-    assert avatar["src"].present?
+    assert_predicate avatar["src"], :present?
     assert_equal @user.name, avatar["alt"]
   end
 
